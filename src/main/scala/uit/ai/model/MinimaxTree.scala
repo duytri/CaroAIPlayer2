@@ -62,13 +62,13 @@ class MinimaxTree(
 
     if (player == currentPlayer) {
       var best: Int = Int.MinValue
-      
+
       Utils.getCandidates(stepBoard.board).foreach(move => {
-        var value = minimaxWithAlphaBeta(depth+1,-1*player,Utils.getStateAfterMove(),alpha, beta, hasBlock)
+        var value = minimaxWithAlphaBeta(depth + 1, -1 * player, Utils.getStateAfterMove(), alpha, beta, hasBlock)
         best = math.max(best, value)
         alpha = math.max(alpha, best)
-        
-        if(alpha <= beta)
+
+        if (alpha <= beta)
           break;
       })
       return best;
