@@ -128,16 +128,16 @@ object Utils {
     return 0
   }
 
-  def calculateValue(node: Vertex, numInARowNeeded: Int, player: Byte, hasBlock: Boolean): Int = {
+  def calculateValue(board: Array[Array[Byte]], move: (Int, Int), rowCount: Int, columnCount: Int, numInARowNeeded: Int, player: Byte, hasBlock: Boolean): Int = {
     //val rowCount = node.board.length
     //val columnCount = if (node.board.isEmpty) 0 else node.board(0).length
 
     var point = 0
     val bufferMove = new ArrayBuffer[Array[Byte]]()
-    bufferMove.append(getRow(node.board, node.move))
-    bufferMove.append(getColumn(node.board, node.move, node.rowCount))
-    bufferMove.append(getLTR(node.board, node.move, node.rowCount, node.columnCount))
-    bufferMove.append(getRTL(node.board, node.move, node.rowCount, node.columnCount))
+    bufferMove.append(getRow(board, move))
+    bufferMove.append(getColumn(board, move, rowCount))
+    bufferMove.append(getLTR(board, move, rowCount, columnCount))
+    bufferMove.append(getRTL(board, move, rowCount, columnCount))
 
     val arrayMove = bufferMove.toArray
 
@@ -154,15 +154,15 @@ object Utils {
     return point
   }
 
-  def checkWinAtState(node: Vertex, numInARowNeeded: Int, hasBlock: Boolean): Byte = {
+  def checkWinAtState(board: Array[Array[Byte]], move: (Int, Int), rowCount: Int, columnCount: Int, numInARowNeeded: Int, hasBlock: Boolean): Byte = {
     //val rowCount = board.length
     //val columnCount = if (board.isEmpty) 0 else board(0).length
 
-    if (node.move != null) {
-      val row = nInARow(numInARowNeeded, getRow(node.board, node.move), hasBlock)
-      val column = nInARow(numInARowNeeded, getColumn(node.board, node.move, node.rowCount), hasBlock)
-      val ltr = nInARow(numInARowNeeded, getLTR(node.board, node.move, node.rowCount, node.columnCount), hasBlock)
-      val rtl = nInARow(numInARowNeeded, getRTL(node.board, node.move, node.rowCount, node.columnCount), hasBlock)
+    if (move != null) {
+      val row = nInARow(numInARowNeeded, getRow(board, move), hasBlock)
+      val column = nInARow(numInARowNeeded, getColumn(board, move, rowCount), hasBlock)
+      val ltr = nInARow(numInARowNeeded, getLTR(board, move, rowCount, columnCount), hasBlock)
+      val rtl = nInARow(numInARowNeeded, getRTL(board, move, rowCount, columnCount), hasBlock)
 
       if (row != 0) return row
       else if (column != 0) return column

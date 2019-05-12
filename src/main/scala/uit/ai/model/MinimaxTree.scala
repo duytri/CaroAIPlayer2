@@ -2,6 +2,10 @@ package main.scala.uit.ai.model
 
 class MinimaxTree(
   val currentPlayer: Byte,
+  val board: Array[Array[Byte]],
+  val move: (Int, Int),
+  val rowCount: Int,
+  val columnCount: Int,
   val numInARowNeeded: Int) {
 
   val MAX_DEPTH = 3
@@ -56,20 +60,21 @@ class MinimaxTree(
     return maxMove
   }*/
 
-  def minimaxWithAlphaBeta(depth: Int, player: Byte, stepBoard: Vertex, var alpha: Int, var beta: Int, hasBlock: Boolean): Int = {
-    if (Utils.checkWinAtState(stepBoard, numInARowNeeded, hasBlock) != 0 || depth == 0)
-      return Utils.calculateValue(stepBoard, numInARowNeeded, player, hasBlock) // calculate node value
+  def minimaxWithAlphaBeta(depth: Int, player: Byte, stepBoard: Array[Array[Byte]], move: (Int, Int), rowCount: Int, columnCount: Int, alpha: Int, beta: Int, hasBlock: Boolean): Int = {
+    if (Utils.checkWinAtState(stepBoard, move, rowCount, columnCount, numInARowNeeded, hasBlock) != 0 || depth == 0)
+      return Utils.calculateValue(stepBoard, move, rowCount, columnCount, numInARowNeeded, player, hasBlock) // calculate node value
 
     if (player == currentPlayer) {
       var best: Int = Int.MinValue
+      val oponentPlayer: Byte = (-1 * player).asInstanceOf[Byte]
 
-      Utils.getCandidates(stepBoard.board).foreach(move => {
-        var value = minimaxWithAlphaBeta(depth + 1, -1 * player, Utils.getStateAfterMove(), alpha, beta, hasBlock)
+      Utils.getCandidates(stepBoard).foreach(move => {
+        var value = minimaxWithAlphaBeta(depth + 1, oponentPlayer, Utils.getStateAfterMove(stepBoard, move, oponentPlayer), move, rowCount, columnCount, alpha, beta, hasBlock)
         best = math.max(best, value)
-        alpha = math.max(alpha, best)
+        val alphaNew = math.max(alpha, best)
 
-        if (alpha <= beta)
-          break;
+        if (alphaNew <= beta)
+          return alphaNew;
       })
       return best;
     }
