@@ -28,12 +28,23 @@ class CaroPlayer extends Player {
     })
 
     if (countNonEmpty > 0) { // van co da dau roi
-      val minimax = new MinimaxTree(numInARowNeeded)
-      minimax.evaluateTreeWithAlphaBeta(board, numberOfLevel, hasBlock)
+      val mnmTree = new MinimaxTree(playerSide, board, null, rowCount, columnCount, numInARowNeeded)
+
+      var maxValue = Int.MinValue
+      var maxMove: (Int, Int) = (0, 0)
+      //minimize(root, numberOfLevel, Int.MinValue, Int.MaxValue, hasBlock)
+      Utils.getCandidates(board, rowCount, columnCount).foreach(move => {
+        val newValue = mnmTree.minimaxWithAlphaBeta(1, playerSide, board, move, rowCount, columnCount, Int.MinValue, Int.MaxValue, hasBlock)
+        if (maxValue < newValue) {
+          maxValue = newValue
+          maxMove = move
+        }
+      })
+      return maxMove
+
     } else { // van co chua dau
       (rowCount / 2, columnCount / 2)
     }
   }
-  
-  
+
 }

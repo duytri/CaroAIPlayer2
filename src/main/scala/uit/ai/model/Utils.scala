@@ -7,9 +7,9 @@ object Utils {
   val WIN_VALUE = 100000
   val DIVIDE_RATIO = 7
 
-  def getCandidates(board: Array[Array[Byte]]): Array[(Int, Int)] = {
-    val rowCount = board.length
-    val columnCount = if (board.isEmpty) 0 else board(0).length
+  def getCandidates(board: Array[Array[Byte]], rowCount: Int, columnCount: Int): Array[(Int, Int)] = {
+    /*val rowCount = board.length
+    val columnCount = if (board.isEmpty) 0 else board(0).length*/
 
     val candidates = new ArrayBuffer[(Int, Int)] //set of candidates
     val nonAvailableElems = new ArrayBuffer[(Int, Int)] //set of non available movements
@@ -129,9 +129,6 @@ object Utils {
   }
 
   def calculateValue(board: Array[Array[Byte]], move: (Int, Int), rowCount: Int, columnCount: Int, numInARowNeeded: Int, player: Byte, hasBlock: Boolean): Int = {
-    //val rowCount = node.board.length
-    //val columnCount = if (node.board.isEmpty) 0 else node.board(0).length
-
     var point = 0
     val bufferMove = new ArrayBuffer[Array[Byte]]()
     bufferMove.append(getRow(board, move))
@@ -144,10 +141,11 @@ object Utils {
     for (num <- numInARowNeeded to 1 by -1) {
       arrayMove.foreach(row => {
         val side = nInARow(num, row, hasBlock)
-        if (side == player) // Me
+        /*if (side == player) // Me
           point = point + WIN_VALUE / ((numInARowNeeded + 1 - num) * DIVIDE_RATIO)
         else if (side == -1 * player) // My Opponent
-          point = point - WIN_VALUE / ((numInARowNeeded + 1 - num) * DIVIDE_RATIO)
+          point = point - WIN_VALUE / ((numInARowNeeded + 1 - num) * DIVIDE_RATIO)*/
+        point = point + player * WIN_VALUE / ((numInARowNeeded + 1 - num) * DIVIDE_RATIO)
       })
     }
 
@@ -155,8 +153,6 @@ object Utils {
   }
 
   def checkWinAtState(board: Array[Array[Byte]], move: (Int, Int), rowCount: Int, columnCount: Int, numInARowNeeded: Int, hasBlock: Boolean): Byte = {
-    //val rowCount = board.length
-    //val columnCount = if (board.isEmpty) 0 else board(0).length
 
     if (move != null) {
       val row = nInARow(numInARowNeeded, getRow(board, move), hasBlock)
