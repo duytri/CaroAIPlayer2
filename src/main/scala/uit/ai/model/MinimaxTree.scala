@@ -8,7 +8,7 @@ class MinimaxTree(
   val columnCount: Int,
   val numInARowNeeded: Int) {
 
-  val MAX_DEPTH = 3
+  val MAX_DEPTH = 5
 
   def minimaxWithAlphaBeta(depth: Int, player: Byte, stepBoard: Array[Array[Byte]], move: (Int, Int), rowCount: Int, columnCount: Int, alpha: Int, beta: Int, hasBlock: Boolean): Int = {
     if (Utils.checkWinAtState(stepBoard, move, rowCount, columnCount, numInARowNeeded, hasBlock) != 0 || depth == MAX_DEPTH)
@@ -36,6 +36,21 @@ class MinimaxTree(
       return betaNew;
     }
     return 0
+  }
+  
+  def startEvaluate(board: Array[Array[Byte]], playerSide: Byte, numInARowNeeded: Int, hasBlock: Boolean):(Int, Int)={
+    var maxValue = Int.MinValue
+      var maxMove: (Int, Int) = (0, 0)
+      //println("=====================================")
+      Utils.getCandidates(board, rowCount, columnCount).foreach(move => {
+        //println("Candidate: x = " + move._1 + " and y = " + move._2)
+        val newValue = minimaxWithAlphaBeta(1, playerSide, board, move, rowCount, columnCount, Int.MinValue, Int.MaxValue, hasBlock)
+        if (maxValue < newValue) {
+          maxValue = newValue
+          maxMove = move
+        }
+      })
+      return maxMove
   }
 
 }

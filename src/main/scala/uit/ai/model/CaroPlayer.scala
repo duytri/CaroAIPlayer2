@@ -21,6 +21,7 @@ class CaroPlayer extends Player {
   }
 
   def nextMove(board: Array[Array[Byte]], playerSide: Byte, numInARowNeeded: Int, hasBlock: Boolean): (Int, Int) = {
+    println("THINKING ...")
     val rowCount = board.length
     val columnCount = board(0).length
     val countNonEmpty = board.foldLeft(0)((x, row) => {
@@ -32,8 +33,9 @@ class CaroPlayer extends Player {
 
       var maxValue = Int.MinValue
       var maxMove: (Int, Int) = (0, 0)
-      //minimize(root, numberOfLevel, Int.MinValue, Int.MaxValue, hasBlock)
+      //println("=====================================")
       Utils.getCandidates(board, rowCount, columnCount).foreach(move => {
+        //println("Candidate: x = " + move._1 + " and y = " + move._2)
         val newValue = mnmTree.minimaxWithAlphaBeta(1, playerSide, board, move, rowCount, columnCount, Int.MinValue, Int.MaxValue, hasBlock)
         if (maxValue < newValue) {
           maxValue = newValue

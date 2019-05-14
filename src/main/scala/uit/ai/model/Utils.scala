@@ -8,16 +8,16 @@ object Utils {
   val DIVIDE_RATIO = 7
 
   def getCandidates(board: Array[Array[Byte]], rowCount: Int, columnCount: Int): Array[(Int, Int)] = {
-    /*val rowCount = board.length
-    val columnCount = if (board.isEmpty) 0 else board(0).length*/
 
     val candidates = new ArrayBuffer[(Int, Int)] //set of candidates
     val nonAvailableElems = new ArrayBuffer[(Int, Int)] //set of non available movements
     // get all non-available moves
-    for (r <- 0 until rowCount)
-      for (c <- 0 until columnCount)
+    for (r <- 0 until rowCount) {
+      for (c <- 0 until columnCount) {
         if (board(r)(c) != 0)
           nonAvailableElems.append((r, c))
+      }
+    }
     // check around to get candidates
     for (e <- nonAvailableElems) {
       if (e._1 + 1 < rowCount && !nonAvailableElems.contains((e._1 + 1, e._2)) && !candidates.contains((e._1 + 1, e._2))) //East
